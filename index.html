@@ -7,21 +7,56 @@
     <title>I miei animali Preferiti</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- IMPORT DIRETTO DI REACT SU HTML -->
+    <!-- IMPORT REACT + BABEL -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone"></script>
 
-    <!-- SCRIPT DI BABEL PER LETTURA DI REACT SU INDEX.HTML -->
+    <!-- COMPONENTE REACT -->
     <script type="text/babel">
+
+        // IMPORT USE-STATE FROM REACT
         const { useState } = React;
-        const ReactApp = () => {
-            return (
-                <main>
-                    contenuto
-                </main>
-            );
+
+        const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+
+        const ListaAnimali = () => {
+
+            const [animals, setAnimals] = useState([]);
+
+            function addAnimal(animals, animalsChoices) {
+                const randomIndex = Math.floor(Math.random() * animalsChoices.length);
+                setAnimals([...animals, animalsChoices[randomIndex]]);
+            }
+
+            return <>
+                <button
+                    onClick={() => addAnimal(animals, animalsChoices)}
+                >
+                    Aggiungi Animale
+                </button>
+                <button
+                    onClick={() => setAnimals([])}
+                >
+                    Reset List
+                </button>
+
+                <details>
+                    <summary>Animali</summary>
+                    <ul>
+                        {animals.map((animal, index) => <li key={index}>{animal}</li>)}
+                    </ul>
+                </details>
+            </>
         };
+    </script>
+
+    <!-- RENDERING COMPONENTE REACT -->
+    <script type="text/babel">
+        const { createRoot } = ReactDOM;
+        const listaAnimali = document.querySelector('.lista-animali');
+        const root = createRoot(listaAnimali);
+        root.render(<ListaAnimali />);
     </script>
 </head>
 
