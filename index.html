@@ -49,13 +49,17 @@
                 </details>
             </>
         };
-    </script>
 
-    <!-- RENDERING COMPONENTE REACT -->
-    <script type="text/babel">
+        // IMPORT FUNZIONE CREA ROOT
         const { createRoot } = ReactDOM;
+
+        // DOCUMENT SELECTORS COMPONENTI REACT
         const listaAnimali = document.querySelector('.lista-animali');
+
+        // CREAZIONE ROOTS
         const root = createRoot(listaAnimali);
+
+        // RENDER COMPONENTI
         root.render(<ListaAnimali />);
     </script>
 </head>
