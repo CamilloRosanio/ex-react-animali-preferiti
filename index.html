@@ -1,58 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-<!--**********************************************************
-| # HEAD
-**********************************************************-->
-
 <head>
     <meta charset="UTF-8">
-
-    <!-- STRING MEDIAQUERY -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I miei animali Preferiti</title>
+    <link rel="stylesheet" href="style.css">
 
-    <!-- TITOLO TAB -->
-    <title>React senza Vite</title>
+    <!-- IMPORT DIRETTO DI REACT SU HTML -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone"></script>
 
-    <!-- FAVICON -->
-    <link rel="icon" type="image/x-icon" href="">
-
-    <!-- INFO AGGIUNTIVE -->
-    <meta name="author" content="Camillo Rosanio">
-    <meta name="description" content="descrizione del file">
-    <meta name="keywords" content="keyword1, keyword2, keyword3">
-
-    <!-- FONT -->
-    <!-- paste here -->
-
-    <!-- STYLE -->
-    <link rel="stylesheet" href="">
-
-    <!-- CSS MEDIAQUERY (Separato) -->
-    <!-- ***FACOLTATIVO*** -->
-    <link rel="stylesheet" href="">
-
+    <!-- SCRIPT DI BABEL PER LETTURA DI REACT SU INDEX.HTML -->
+    <script type="text/babel">
+        const { useState } = React;
+        const ReactApp = () => {
+            return (
+                <main>
+                    contenuto
+                </main>
+            );
+        };
+    </script>
 </head>
 
 
 
-
-
-<!--**********************************************************
-| # BODY
-**********************************************************-->
+<!-- CONTENUTO -->
 
 <body>
     <header>
-        header
+        <h1>I miei animali Preferiti</h1>
     </header>
-
     <main>
-        main
+        <figure>
+            <img src="https://picsum.photos/400/300" alt="Immagine Casuale">
+        </figure>
+        <div class="lista-animali"></div>
     </main>
-
     <footer>
-        footer
+        <p>Creato con amore da... un collega sbadato! 🐾</p>
     </footer>
 </body>
+
+</html>
