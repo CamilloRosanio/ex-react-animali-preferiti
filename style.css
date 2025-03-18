@@ -58,3 +58,14 @@ img {
     padding: 20px;
     border-radius: 5px;
 }
+
+.card {
+    display: flex;
+    background-color: lightblue;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.card img {
+    height: 100px;
+}

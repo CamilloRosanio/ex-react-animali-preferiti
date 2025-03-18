@@ -59,18 +59,75 @@
             const [showModal, setShowModal] = useState(false);
             const [animalInput, setAnimalInput] = useState('');
 
-            function addAnimal(animals/*, animalsChoices*/) {
-                // FUNZIONE PER BOTTONE SENZA MODAL
+            const [apiLoading, setApiLoading] = useState(false);
+            const [errorMessage, setErrorMessage] = useState('');
+
+            async function addAnimal(animals/*, animalsChoices*/) {
+
+                // MILESTONE 2 - FUNZIONE PER BOTTONE SENZA MODAL
                 // const randomIndex = Math.floor(Math.random() * animalsChoices.length);
                 // setAnimals([...animals, animalsChoices[randomIndex]]);
 
-                // FUNZIONE PER MODAL CON INPUT
-                if (!animalInput) return;
-                setAnimals([...animals, animalInput]);
-                setAnimalInput('');
-                setShowModal(false);
+                // MILESTONE 3 - FUNZIONE PER MODAL CON INPUT
+                // if (!animalInput) return;
+                // setAnimals([...animals, animalInput]);
+                // setAnimalInput('');
+                // setShowModal(false);
+
+                // BONUS - FUNZIONE PER MODAL CON INPUT
+                if (!animalInput.trim()) return;
+                setApiLoading(true);
+                setErrorMessage('');
+                try {
+                    const response = await fetch(`https://boolean-spec-frontend.vercel.app/freetestapi/animals?search=${animalInput}`);
+                    const result = await response.json();
+                    console.log('FETCH RESULT:');
+                    console.log(result);
+                    if (!result) {
+                        throw new Error('Nessun animale trovato')
+                    }
+                    const animalObject = {
+                        name: result[0].name || 'Nome non disponibile',
+                        description: result[0].description || 'Descrizione non disponibile',
+                        image: result[0].image || null,
+                    }
+                    setAnimals([...animals, animalObject]);
+                } catch (error) {
+                    console.error(error);
+                    const message = error.message === 'Nessun animale trovato' ? 'Nessun animale trovato' : 'Errore durante la ricerca dei risultati';
+                    setErrorMessage(message);
+                } finally {
+                    setAnimalInput('');
+                    setShowModal(false);
+                    setApiLoading(false);
+                }
+
             }
 
+            // FINO A MILESTONE 3
+            // return <>
+            //     <button
+            //         onClick={() => setShowModal(true)}
+            //     // onClick={() => addAnimal(animals, animalsChoices)}
+            //     >
+            //         Aggiungi Animale
+            //     </button>
+            //     <button
+            //         onClick={() => setAnimals([])}
+            //     >
+            //         Reset List
+            //     </button>
+
+            //     <details>
+            //         <summary>Animali</summary>
+            //         <ul>
+            //             {animals.map((animal, index) => <li key={index}>{animal}</li>)}
+            //         </ul>
+            //     </details>
+            // </>
+
+
+            // BONUS
             return <>
                 <button
                     onClick={() => setShowModal(true)}
@@ -86,9 +143,19 @@
 
                 <details>
                     <summary>Animali</summary>
-                    <ul>
-                        {animals.map((animal, index) => <li key={index}>{animal}</li>)}
-                    </ul>
+                    <div>
+                        {errorMessage && <p>{errorMessage}</p>}
+                        {animals.map((animal, index) => <div key={index} className='card'>
+                            <div>
+                                <h3>{animal.name}</h3>
+                                <p>{animal.description}</p>
+                            </div>
+                            {animal.image &&
+                                <figure>
+                                    <img src={animal.image} alt={animal.name} />
+                                </figure>}
+                        </div>)}
+                    </div>
                 </details>
 
                 <Modal
@@ -96,13 +163,14 @@
                     onClose={() => setShowModal(false)}
                     onConfirm={() => addAnimal(animals)}
                     title='Aggiungi Animale'
-                    content={
+                    content={<>
                         <input
                             type='text'
                             value={animalInput}
                             onChange={e => setAnimalInput(e.target.value)}
                         />
-                    }
+                        {apiLoading && <span>Caricamento...</span>}
+                    </>}
                 />
             </>
         };
