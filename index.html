@@ -12,26 +12,69 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone"></script>
 
+    <!-- React viene importato tramite gli script sopra, e viene letto grazie all'import di BABEL, cioè il terzo script tra quelli sopra. Subito sotto, si crea il componente e si esegue successivamente il render su pagina dell'elemento interattivo.
+    In ordine: il primo script importa React, il secondo ReactDOM (per montare i componenti nel DOM) e il terzo BABEL per la lettura da parte del file HTML dei componenti realizzati in React (.jsx). -->
+
+
     <!-- COMPONENTE REACT -->
     <script type="text/babel">
 
         // IMPORT USE-STATE FROM REACT
         const { useState } = React;
 
-        const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+        /***************************************************************************************************************************
+        # REACT COMPONENTS
+        ***************************************************************************************************************************/
 
+        // COMPONENT - MODAL
+        function Modal({
+            title,
+            content,
+            show = false,
+            onClose = () => { },
+            onConfirm = () => { },
+        }) {
+            return show && ReactDOM.createPortal(
+                <div className="modal-container">
+                    <div className="modal">
+                        <h2>{title}</h2>
+                        <p>{content}</p>
+                        <div>
+                            <button onClick={onClose}>Annulla</button>
+                            <button onClick={onConfirm}>Conferma</button>
+                        </div>
+                    </div>
+                </div>,
+                document.body
+            )
+        }
+
+
+        // COMPONENT - LISTA ANIMALI
+        const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
         const ListaAnimali = () => {
 
             const [animals, setAnimals] = useState([]);
 
-            function addAnimal(animals, animalsChoices) {
-                const randomIndex = Math.floor(Math.random() * animalsChoices.length);
-                setAnimals([...animals, animalsChoices[randomIndex]]);
+            const [showModal, setShowModal] = useState(false);
+            const [animalInput, setAnimalInput] = useState('');
+
+            function addAnimal(animals/*, animalsChoices*/) {
+                // FUNZIONE PER BOTTONE SENZA MODAL
+                // const randomIndex = Math.floor(Math.random() * animalsChoices.length);
+                // setAnimals([...animals, animalsChoices[randomIndex]]);
+
+                // FUNZIONE PER MODAL CON INPUT
+                if (!animalInput) return;
+                setAnimals([...animals, animalInput]);
+                setAnimalInput('');
+                setShowModal(false);
             }
 
             return <>
                 <button
-                    onClick={() => addAnimal(animals, animalsChoices)}
+                    onClick={() => setShowModal(true)}
+                // onClick={() => addAnimal(animals, animalsChoices)}
                 >
                     Aggiungi Animale
                 </button>
@@ -47,20 +90,41 @@
                         {animals.map((animal, index) => <li key={index}>{animal}</li>)}
                     </ul>
                 </details>
+
+                <Modal
+                    show={showModal}
+                    onClose={() => setShowModal(false)}
+                    onConfirm={() => addAnimal(animals)}
+                    title='Aggiungi Animale'
+                    content={
+                        <input
+                            type='text'
+                            value={animalInput}
+                            onChange={e => setAnimalInput(e.target.value)}
+                        />
+                    }
+                />
             </>
         };
+
+
+
+        /***************************************************************************************************************************
+        # COMPONENTS ROOTS + RENDER
+        ***************************************************************************************************************************/
 
         // IMPORT FUNZIONE CREA ROOT
         const { createRoot } = ReactDOM;
 
-        // DOCUMENT SELECTORS COMPONENTI REACT
+        // DOCUMENT SELECTORS - COMPONENTS REACT
         const listaAnimali = document.querySelector('.lista-animali');
 
-        // CREAZIONE ROOTS
+        // CREAZIONE ROOTS DEI COMPONENTS
         const root = createRoot(listaAnimali);
 
-        // RENDER COMPONENTI
+        // RENDER COMPONENTS
         root.render(<ListaAnimali />);
+
     </script>
 </head>
 
